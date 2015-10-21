@@ -803,7 +803,7 @@ cmd_push()
 
 subtree_list()
 {
-	git config -f .gittrees -l | grep subtree | grep path | grep -o '=.*' | grep -o '[^=].*' |
+	git config -f .gittrees -l | grep subtree | grep path | sed "s/.*=//g" |
 	while read path; do
 		repository=$(git config -f .gittrees subtree.$path.url)
 		refspec=$(git config -f .gittrees subtree.$path.branch)
@@ -851,7 +851,7 @@ cmd_from-submodule()
 
 cmd_prune()
 {
-	git config -f .gittrees -l | grep subtree | grep path | grep -o '=.*' | grep -o '[^=].*' |
+	git config -f .gittrees -l | grep subtree | grep path | sed "s/.*=//g" |
 	while read path; do
 		if [ ! -e "$path" ]; then
 			echo "pruning $path"
@@ -862,7 +862,7 @@ cmd_prune()
 
 cmd_pull-all()
 {
-	git config -f .gittrees -l | grep subtree | grep path | grep -o '=.*' | grep -o '[^=].*' |
+	git config -f .gittrees -l | grep subtree | grep path | sed "s/.*=//g" |
 	while read path; do
 		git subtree pull -P $path $(git config -f .gittrees subtree.$path.url) $(git config -f .gittrees subtree.$path.branch) || exit $?
 	done
@@ -870,7 +870,7 @@ cmd_pull-all()
 
 cmd_push-all()
 {
-	git config -f .gittrees -l | grep subtree | grep path | grep -o '=.*' | grep -o '[^=].*' |
+	git config -f .gittrees -l | grep subtree | grep path | sed "s/.*=//g" |
 	while read path; do
 		git subtree push -P $path $(git config -f .gittrees subtree.$path.url) $(git config -f .gittrees subtree.$path.branch) || exit $?
 	done
